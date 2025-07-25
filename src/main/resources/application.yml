@@ -1,5 +1,23 @@
-#
-# application.yml — главный конфигурационный файл Spring Boot.
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+      mode: always
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/card-db
+    username: admin
+    password: secret
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/migration/db.changelog-master.yaml
 
 Что нужно сделать:
   - Указать настройки подключения к базе данных.

@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: sabitov
+      changes:
+        - createTable:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: encrypted_card_number
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: expiration_date
+                  type: date
+              - column:
+                  name: balance
+                  type: decimal(19,2)
+              - column:
+                  name: status
+                  type: varchar(50)
+              - column:
+                  name: user_id
+                  type: uuid
+        - addForeignKeyConstraint:
+            baseTableName: cards
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_cards_user_id
