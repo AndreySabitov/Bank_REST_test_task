@@ -13,10 +13,15 @@ databaseChangeLog:
                     primaryKey: true
               - column:
                   name: name
-                  type: varchar(255)
+                  type: varchar(50)
               - column:
                   name: password
                   type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(50)
+                  constraints:
+                    unique: true
               - column:
                   name: role
                   type: varchar(50)
