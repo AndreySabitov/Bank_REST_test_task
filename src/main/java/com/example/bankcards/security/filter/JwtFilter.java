@@ -1,7 +1,7 @@
 package com.example.bankcards.security.filter;
 
-import com.example.bankcards.service.JwtTokenService;
-import com.example.bankcards.service.UserService;
+import com.example.bankcards.service.auth.JwtTokenService;
+import com.example.bankcards.service.user.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

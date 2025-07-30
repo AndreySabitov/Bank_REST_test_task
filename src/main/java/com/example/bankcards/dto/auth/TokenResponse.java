@@ -1,4 +1,4 @@
-package com.example.bankcards.dto;
+package com.example.bankcards.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

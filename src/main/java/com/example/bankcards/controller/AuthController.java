@@ -1,9 +1,9 @@
 package com.example.bankcards.controller;
 
-import com.example.bankcards.dto.SignInRequest;
-import com.example.bankcards.dto.SignUpRequest;
-import com.example.bankcards.dto.TokenResponse;
-import com.example.bankcards.service.AuthenticationService;
+import com.example.bankcards.dto.auth.SignInRequest;
+import com.example.bankcards.dto.auth.SignUpRequest;
+import com.example.bankcards.dto.auth.TokenResponse;
+import com.example.bankcards.service.auth.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

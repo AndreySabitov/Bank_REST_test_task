@@ -2,9 +2,7 @@ package com.example.bankcards.entity.card;
 
 import com.example.bankcards.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,6 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
+@Builder
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
