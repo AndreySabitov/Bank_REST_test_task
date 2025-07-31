@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: Sabitov
+      changes:
+        - createTable:
+            tableName: transfer_operations
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primary key: true
+              - column:
+                  name: from_card_id
+                  type: uuid
+                  constraints:
+                    notNull: true
+              - column:
+                  name: to_card_id
+                  type: uuid
+                  constraints:
+                    notNull: true
+              - column:
+                  name: amount
+                  type: decimal(19, 2)
+                  constraints:
+                    notNull: true
+        - addForeignKeyConstraint:
+            baseTableName: transfer_operations
+            baseColumnNames: from_card_id
+            referencedTableName: cards
+            referencedColumnNames: id
+            constraintName: fk_from_card_to_card
+        - addForeignKeyConstraint:
+            baseTableName: transfer_operations
+            baseColumnNames: to_card_id
+            referencedTableName: cards
+            referencedColumnNames: id
+            constraintName: fk_to_card_to_card

@@ -1,6 +1,6 @@
 services:
   card-db:
-    image: postgres:latest
+    image: postgres:17.5
     container_name: card-db
     ports:
       - "5432:5432"
