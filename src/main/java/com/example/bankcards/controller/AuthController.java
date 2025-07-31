@@ -1,7 +1,6 @@
 package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.auth.SignInRequest;
-import com.example.bankcards.dto.auth.SignUpRequest;
 import com.example.bankcards.dto.auth.TokenResponse;
 import com.example.bankcards.service.auth.AuthenticationService;
 import jakarta.validation.Valid;
@@ -16,11 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationService authenticationService;
-
-    @PostMapping("/sign-up")
-    public TokenResponse signUp(@RequestBody @Valid SignUpRequest request) {
-        return authenticationService.signUp(request);
-    }
 
     @PostMapping("/sign-in")
     public TokenResponse signIn(@RequestBody @Valid SignInRequest request) {
