@@ -1,5 +1,6 @@
 package com.example.bankcards.controller;
 
+import com.example.bankcards.dto.card.BlockingCardRequestDto;
 import com.example.bankcards.dto.card.CardDto;
 import com.example.bankcards.dto.card.Pageable;
 import com.example.bankcards.dto.card.TransferBetweenCardsRequest;
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/private/cards")
+@RequestMapping("/users/cards")
 @PreAuthorize("hasRole('USER')")
 public class UserCardController {
     private final CardService cardService;
@@ -30,8 +31,8 @@ public class UserCardController {
 
     @PostMapping("/blocking")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void addBlockingCardRequest(@RequestBody UUID cardId) {
-        cardService.addBlockingCardRequest(cardId);
+    public BlockingCardRequestDto addBlockingCardRequest(@RequestBody UUID cardId) {
+        return cardService.addBlockingCardRequest(cardId);
     }
 
     @PostMapping("/transfer")

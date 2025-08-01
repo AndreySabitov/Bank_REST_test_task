@@ -1,9 +1,6 @@
 package com.example.bankcards.service.card;
 
-import com.example.bankcards.dto.card.CardDto;
-import com.example.bankcards.dto.card.CreateCardDto;
-import com.example.bankcards.dto.card.Pageable;
-import com.example.bankcards.dto.card.TransferBetweenCardsRequest;
+import com.example.bankcards.dto.card.*;
 import com.example.bankcards.entity.card.CardStatus;
 
 import java.math.BigDecimal;
@@ -27,7 +24,7 @@ public interface CardService {
 
     List<CardDto> getAllCardsByUser(UUID userId, Pageable pageable, CardStatus cardStatus);
 
-    void addBlockingCardRequest(UUID cardId);
+    BlockingCardRequestDto addBlockingCardRequest(UUID cardId);
 
     void transferBetweenCards(TransferBetweenCardsRequest transferRequest);
 

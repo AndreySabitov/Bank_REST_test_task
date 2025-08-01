@@ -23,6 +23,9 @@ public class Card {
     @Column(name = "encrypted_card_number", unique = true)
     private String encryptedCardNumber;
 
+    @Column(name = "masked_card_number")
+    private String maskedCardNumber;
+
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
 

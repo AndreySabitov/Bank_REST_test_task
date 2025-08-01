@@ -2,12 +2,14 @@ package com.example.bankcards.dto.card;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
+@AllArgsConstructor
 public class TransferBetweenCardsRequest {
     @NotNull
     private UUID fromCard;

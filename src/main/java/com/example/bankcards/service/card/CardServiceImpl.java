@@ -1,9 +1,6 @@
 package com.example.bankcards.service.card;
 
-import com.example.bankcards.dto.card.CardDto;
-import com.example.bankcards.dto.card.CreateCardDto;
-import com.example.bankcards.dto.card.Pageable;
-import com.example.bankcards.dto.card.TransferBetweenCardsRequest;
+import com.example.bankcards.dto.card.*;
 import com.example.bankcards.entity.card.Card;
 import com.example.bankcards.entity.card.CardStatus;
 import com.example.bankcards.entity.card.QCard;
@@ -17,7 +14,10 @@ import com.example.bankcards.repository.BlockingCardRequestRepository;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.TransferOperationRepository;
 import com.example.bankcards.repository.UserRepository;
+import com.example.bankcards.service.card.mapper.BlockingCardRequestMapper;
 import com.example.bankcards.service.card.mapper.CardMapper;
+import com.example.bankcards.util.CardConcealer;
+import com.example.bankcards.util.CardEncryptor;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +39,7 @@ public class CardServiceImpl implements CardService {
     private final UserRepository userRepository;
     private final TransferOperationRepository transferOperationRepository;
     private final BlockingCardRequestRepository blockingCardRequestRepository;
+    private final CardEncryptor cardEncryptor;
 
     @Override
     @Transactional
@@ -46,7 +47,11 @@ public class CardServiceImpl implements CardService {
         User owner = userRepository.findById(createCardDto.getUserId()).orElseThrow(() ->
                 new NotFoundException("Пользователь не найден"));
 
-        return CardMapper.mapToDto(cardRepository.save(CardMapper.mapCreateDtoToCard(createCardDto, owner)));
+        String encryptedCardNumber = cardEncryptor.encrypt(createCardDto.getCardNumber());
+        String maskedCardNumber = CardConcealer.maskCardNumber(createCardDto.getCardNumber());
+        Card card = cardRepository.save(CardMapper.mapCreateDtoToCard(owner, encryptedCardNumber, maskedCardNumber));
+
+        return CardMapper.mapToDto(card);
     }
 
     @Override
@@ -63,6 +68,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    @Transactional
     public void blockingCardByRequest(UUID requestId) {
         BlockingCardRequest blockingRequest = blockingCardRequestRepository.findById(requestId).orElseThrow(() ->
                 new NotFoundException("Запрос на блокировку карты не найден"));
@@ -70,6 +76,10 @@ public class CardServiceImpl implements CardService {
 
         if (card.getStatus().equals(CardStatus.BLOCKED)) {
             log.info("Карта уже заблокирована");
+            return;
+        }
+        if (blockingRequest.getState().equals(BlockingCardStatus.COMPLETED)) {
+            log.info("Запрос уже выполнен");
             return;
         }
 
@@ -135,9 +145,19 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public void addBlockingCardRequest(UUID cardId) {
+    public BlockingCardRequestDto addBlockingCardRequest(UUID cardId) {
         User user = getCurrentUser();
         Card card = findCardById(cardId);
+
+        if (!card.getStatus().equals(CardStatus.ACTIVE)) {
+            throw new ValidationException("Карта уже заблокирована или истек срок действия карты");
+        }
+        if (!card.getOwner().getId().equals(user.getId())) {
+            throw new ValidationException("Нельзя подать запрос на блокировку чужой карты");
+        }
+        if (blockingCardRequestRepository.existsByCardIdAndInitiatorId(cardId, user.getId())) {
+            throw new ValidationException("Заявка на блокировку карты уже подана");
+        }
 
         BlockingCardRequest request = BlockingCardRequest.builder()
                 .card(card)
@@ -145,7 +165,7 @@ public class CardServiceImpl implements CardService {
                 .initiator(user)
                 .build();
 
-        blockingCardRequestRepository.save(request);
+        return BlockingCardRequestMapper.mapToDto(blockingCardRequestRepository.save(request));
     }
 
     @Override
@@ -158,6 +178,12 @@ public class CardServiceImpl implements CardService {
 
         if (!fromCard.getOwner().getId().equals(owner.getId()) || !toCard.getOwner().getId().equals(owner.getId())) {
             throw new ValidationException("Обе карты должны принадлежать одному пользователю");
+        }
+        if (fromCard.getStatus().equals(CardStatus.BLOCKED) || toCard.getStatus().equals(CardStatus.BLOCKED)) {
+            throw new ValidationException("Нельзя сделать перевод, если карта заблокирована");
+        }
+        if (fromCard.getStatus().equals(CardStatus.EXPIRED) || toCard.getStatus().equals(CardStatus.EXPIRED)) {
+            throw new ValidationException("Нельзя выполнить перевод, так как прошел срок действия одной из карт");
         }
         if (fromCard.getBalance().compareTo(transferRequest.getAmount()) < 0) {
             throw new ValidationException("Не достаточно средств для перевода");
@@ -186,10 +212,16 @@ public class CardServiceImpl implements CardService {
     }
 
     private Card findCardById(UUID cardId) {
+        log.info("Получаем карту по id = {}",cardId);
         return cardRepository.findById(cardId).orElseThrow(() -> new NotFoundException("Карта не найдена"));
     }
 
     private User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (NullPointerException e) {
+            log.error("Не удалось найти пользователя в контексте");
+            throw new NotFoundException("Пользователь не найден");
+        }
     }
 }

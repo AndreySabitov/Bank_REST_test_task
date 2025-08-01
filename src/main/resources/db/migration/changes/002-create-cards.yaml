@@ -17,6 +17,9 @@ databaseChangeLog:
                   constraints:
                     unique: true
               - column:
+                  name: masked_card_number
+                  type: varchar(50)
+              - column:
                   name: expiration_date
                   type: date
               - column:

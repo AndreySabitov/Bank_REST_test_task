@@ -5,6 +5,7 @@ import com.example.bankcards.dto.user.UserDto;
 import com.example.bankcards.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminUserController {
     private final UserService userService;
 

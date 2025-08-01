@@ -2,11 +2,13 @@ package com.example.bankcards.dto.card;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Pageable {
     @Min(value = 0)
     @NotNull

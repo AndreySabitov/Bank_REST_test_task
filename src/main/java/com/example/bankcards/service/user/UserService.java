@@ -15,6 +15,4 @@ public interface UserService {
     UserDetailsService userDetailsService();
 
     void deleteUserById(UUID userId);
-
-    User getCurrentUser();
 }

@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface BlockingCardRequestRepository extends JpaRepository<BlockingCardRequest, UUID> {
+    boolean existsByCardIdAndInitiatorId(UUID cardId, UUID initiatorId);
 }
