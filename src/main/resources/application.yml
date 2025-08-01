@@ -37,6 +37,9 @@ jwt:
   secret: 3f7a9b2e5c8d1f6g4h0i9j2k5l7m8n1o3p6q9r2s4t7u0v1w5x8y2z
   expiration: 86400000
 
+cardEncryptor:
+  password: g@#$%^&*()_ABCDEFG1234567890
+
 Что нужно сделать:
   - Указать настройки подключения к базе данных.
   - Указать порт приложения.
