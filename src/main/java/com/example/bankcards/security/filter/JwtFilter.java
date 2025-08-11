@@ -43,9 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
         var username = jwtTokenService.extractUsername(jwt);
 
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService
-                    .userDetailsService()
-                    .loadUserByUsername(username);
+            UserDetails userDetails = userService.loadUserByUsername(username);
 
             if (jwtTokenService.isTokenValid(jwt, userDetails)) {
                 log.info("Прошли проверку валидности токена");

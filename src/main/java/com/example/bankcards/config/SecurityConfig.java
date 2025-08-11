@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/users/**").hasRole("USER")
                         .anyRequest().authenticated())
+                .userDetailsService(userService)
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -50,14 +51,13 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userService.userDetailsService());
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-            throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 }

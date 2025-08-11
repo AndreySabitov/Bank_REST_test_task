@@ -7,12 +7,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.UUID;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
     UserDto createUser(CreateUserRequest request);
 
     User getByUsername(String username);
-
-    UserDetailsService userDetailsService();
 
     void deleteUserById(UUID userId);
 }

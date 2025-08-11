@@ -8,7 +8,8 @@ import com.example.bankcards.exception.NotFoundException;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.service.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -36,14 +37,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetailsService userDetailsService() {
-        return this::getByUsername;
-    }
-
-    @Override
     public void deleteUserById(UUID userId) {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return getByUsername(username);
     }
 }
