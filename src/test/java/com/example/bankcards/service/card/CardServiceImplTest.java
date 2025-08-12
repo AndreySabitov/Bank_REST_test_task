@@ -166,17 +166,17 @@ class CardServiceImplTest {
 
     @Test
     void checkThrowNotFoundException_IfTryGetAllCardsByUserButUserNotExists() {
-        assertThrows(NotFoundException.class, () -> cardService.getAllCardsByUser(UUID.randomUUID(),
-                new Pageable(0, 10), null));
+        assertThrows(NotFoundException.class, () -> cardService.getAllCardsByUser(new Pageable(0, 10), null));
     }
 
     @Test
     void checkCanGetAllCardsByUser() {
         User user1 = userRepository.save(user);
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user1,
+                null, user1.getAuthorities()));
         Card card1 = cardRepository.save(card);
 
-        List<CardDto> cardDtos = cardService.getAllCardsByUser(user1.getId(), new Pageable(0, 10),
-                null);
+        List<CardDto> cardDtos = cardService.getAllCardsByUser(new Pageable(0, 10), null);
 
         assertFalse(cardDtos.isEmpty());
         assertEquals(1, cardDtos.size());
@@ -186,6 +186,8 @@ class CardServiceImplTest {
     @Test
     void checkCanGetAllCardsByUserAndStatus() {
         User user1 = userRepository.save(user);
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user1,
+                null, user1.getAuthorities()));
         Card card1 = cardRepository.save(card);
         cardRepository.save(Card.builder()
                 .balance(BigDecimal.valueOf(0.0))
@@ -196,8 +198,7 @@ class CardServiceImplTest {
                 .maskedCardNumber("**** **** **** 4343")
                 .build());
 
-        List<CardDto> cardDtos = cardService.getAllCardsByUser(user1.getId(), new Pageable(0, 10),
-                CardStatus.ACTIVE);
+        List<CardDto> cardDtos = cardService.getAllCardsByUser(new Pageable(0, 10), CardStatus.ACTIVE);
 
         assertFalse(cardDtos.isEmpty());
         assertEquals(1, cardDtos.size());

@@ -126,10 +126,9 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public List<CardDto> getAllCardsByUser(UUID userId, Pageable pageable, CardStatus cardStatus) {
-        if (!userRepository.existsById(userId)) {
-            throw new NotFoundException("Пользователь не найден");
-        }
+    public List<CardDto> getAllCardsByUser(Pageable pageable, CardStatus cardStatus) {
+        UUID userId = getCurrentUser().getId();
+
         PageRequest pageRequest = PageRequest.of(pageable.getPage(), pageable.getSize());
 
         BooleanExpression conditions = QCard.card.owner.id.eq(userId);

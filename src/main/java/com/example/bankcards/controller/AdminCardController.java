@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/cards")
+@RequestMapping("/v1/admin/cards")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminCardController {
     private final CardService cardService;
@@ -26,35 +26,32 @@ public class AdminCardController {
         return cardService.createCard(createCardDto);
     }
 
-    @PatchMapping("/blocking")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void blockingCard(@RequestBody UUID cardId) {
+    @PatchMapping("/{cardId}/blocking")
+    public void blockingCard(@PathVariable UUID cardId) {
         cardService.blockingCard(cardId);
     }
 
-    @PatchMapping("/blocking/byRequest")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void blockingCardByRequest(@RequestBody UUID requestId) {
+    @PatchMapping("/{requestId}/blocking/byRequest")
+    public void blockingCardByRequest(@PathVariable UUID requestId) {
         cardService.blockingCardByRequest(requestId);
     }
 
-    @PatchMapping("/activate")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void activateCard(@RequestBody UUID cardId) {
+    @PatchMapping("/{cardId}/activate")
+    public void activateCard(@PathVariable UUID cardId) {
         cardService.activateCard(cardId);
     }
 
-    @DeleteMapping
-    public void deleteCard(@RequestBody UUID cardId) {
+    @DeleteMapping("/{cardId}")
+    public void deleteCard(@PathVariable UUID cardId) {
         cardService.deleteCard(cardId);
     }
 
-    @GetMapping
-    public CardDto getCardById(@RequestBody UUID cardId) {
+    @GetMapping("/{cardId}")
+    public CardDto getCardById(@PathVariable UUID cardId) {
         return cardService.getCardById(cardId);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public List<CardDto> getAllCards(@Valid Pageable pageable) {
         return cardService.getAllCards(pageable);
     }

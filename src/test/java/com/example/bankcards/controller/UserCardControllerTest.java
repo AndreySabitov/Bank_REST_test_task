@@ -64,31 +64,27 @@ class UserCardControllerTest {
 
     @Test
     void testGetAllCardsByUser() throws Exception {
-        when(cardService.getAllCardsByUser(any(UUID.class), any(), any())).thenReturn(List.of(cardDto));
+        when(cardService.getAllCardsByUser(any(), any())).thenReturn(List.of(cardDto));
 
-        mvc.perform(get("/users/cards")
+        mvc.perform(get("/v1/user/cards")
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(cardDto.getId()))
                         .accept(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
 
-        verify(cardService, times(1)).getAllCardsByUser(any(UUID.class), any(), any());
+        verify(cardService, times(1)).getAllCardsByUser(any(), any());
     }
 
     @Test
     void testAddBlockingCardRequest() throws Exception {
         when(cardService.addBlockingCardRequest(any(UUID.class))).thenReturn(blockingCardRequestDto);
 
-        mvc.perform(post("/users/cards/blocking")
+        mvc.perform(post("/v1/user/cards/{cardId}/blocking", blockingCardRequestDto.getCardId())
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(blockingCardRequestDto.getCardId())))
-                .andExpect(status().isAccepted())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(blockingCardRequestDto.getId().toString())))
                 .andExpect(jsonPath("$.cardId", is(blockingCardRequestDto.getCardId().toString())))
                 .andExpect(jsonPath("$.initiatorId", is(blockingCardRequestDto.getInitiatorId().toString())))
@@ -99,13 +95,13 @@ class UserCardControllerTest {
 
     @Test
     void testTransferBetweenCards() throws Exception {
-        mvc.perform(post("/users/cards/transfer")
+        mvc.perform(post("/v1/user/cards/transfer")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new TransferBetweenCardsRequest(UUID.randomUUID(),
                                 UUID.randomUUID(), BigDecimal.valueOf(1.0))))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted());
+                .andExpect(status().isOk());
 
         verify(cardService, times(1)).transferBetweenCards(any(TransferBetweenCardsRequest.class));
     }
@@ -114,10 +110,8 @@ class UserCardControllerTest {
     void getCardBalance() throws Exception {
         when(cardService.getBalance(any(UUID.class))).thenReturn(BigDecimal.valueOf(0.0));
 
-        mvc.perform(get("/users/cards/balance")
+        mvc.perform(get("/v1/user/cards/{cardId}/balance", UUID.randomUUID())
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(UUID.randomUUID()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is(BigDecimal.valueOf(0.0)), BigDecimal.class));

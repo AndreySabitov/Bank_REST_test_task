@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/admin/users")
+@RequestMapping("/v1/admin/users")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminUserController {
@@ -24,8 +24,8 @@ public class AdminUserController {
         return userService.createUser(createUserRequest);
     }
 
-    @DeleteMapping
-    public void deleteUser(@RequestBody UUID userId) {
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable UUID userId) {
         userService.deleteUserById(userId);
     }
 }

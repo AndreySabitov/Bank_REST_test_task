@@ -22,7 +22,7 @@ public interface CardService {
 
     List<CardDto> getAllCards(Pageable pageable);
 
-    List<CardDto> getAllCardsByUser(UUID userId, Pageable pageable, CardStatus cardStatus);
+    List<CardDto> getAllCardsByUser(Pageable pageable, CardStatus cardStatus);
 
     BlockingCardRequestDto addBlockingCardRequest(UUID cardId);
 

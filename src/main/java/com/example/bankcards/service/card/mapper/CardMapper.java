@@ -29,6 +29,7 @@ public class CardMapper {
                 .balance(card.getBalance())
                 .expirationDate(card.getExpirationDate())
                 .maskedCardNumber(card.getMaskedCardNumber())
+                .status(card.getStatus())
                 .username(card.getOwner().getName())
                 .build();
     }

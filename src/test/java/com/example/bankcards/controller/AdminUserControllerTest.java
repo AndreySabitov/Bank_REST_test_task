@@ -49,7 +49,7 @@ class AdminUserControllerTest {
     void createUser() throws Exception {
         when(userService.createUser(any(CreateUserRequest.class))).thenReturn(userDto);
 
-        mvc.perform(post("/admin/users/create")
+        mvc.perform(post("/v1/admin/users/create")
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,10 +69,7 @@ class AdminUserControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void deleteUser() throws Exception {
-        mvc.perform(delete("/admin/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto.getId()))
-                        .characterEncoding(StandardCharsets.UTF_8))
+        mvc.perform(delete("/v1/admin/users/{userId}", userDto.getId()))
                 .andExpect(status().isOk());
 
         verify(userService, times(1)).deleteUserById(any(UUID.class));

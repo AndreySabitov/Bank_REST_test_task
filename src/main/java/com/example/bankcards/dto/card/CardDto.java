@@ -1,5 +1,6 @@
 package com.example.bankcards.dto.card;
 
+import com.example.bankcards.entity.card.CardStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,4 +16,5 @@ public class CardDto {
     private LocalDate expirationDate;
     private BigDecimal balance;
     private String username;
+    private CardStatus status;
 }

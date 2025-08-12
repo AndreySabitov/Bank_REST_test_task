@@ -18,31 +18,30 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users/cards")
+@RequestMapping("/v1/user/cards")
 @PreAuthorize("hasRole('USER')")
 public class UserCardController {
     private final CardService cardService;
 
     @GetMapping
-    public List<CardDto> getAllCardsByUser(@RequestBody UUID userID, @Valid Pageable pageable,
+    public List<CardDto> getAllCardsByUser(@Valid Pageable pageable,
                                            @RequestParam(required = false) CardStatus cardStatus) {
-        return cardService.getAllCardsByUser(userID, pageable, cardStatus);
+        return cardService.getAllCardsByUser(pageable, cardStatus);
     }
 
-    @PostMapping("/blocking")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public BlockingCardRequestDto addBlockingCardRequest(@RequestBody UUID cardId) {
+    @PostMapping("/{cardId}/blocking")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BlockingCardRequestDto addBlockingCardRequest(@PathVariable UUID cardId) {
         return cardService.addBlockingCardRequest(cardId);
     }
 
     @PostMapping("/transfer")
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public void transferBetweenCards(@Valid @RequestBody TransferBetweenCardsRequest transferRequest) {
         cardService.transferBetweenCards(transferRequest);
     }
 
-    @GetMapping("/balance")
-    public BigDecimal getCardBalance(@RequestBody UUID cardId) {
+    @GetMapping("/{cardId}/balance")
+    public BigDecimal getCardBalance(@PathVariable UUID cardId) {
         return cardService.getBalance(cardId);
     }
 }
