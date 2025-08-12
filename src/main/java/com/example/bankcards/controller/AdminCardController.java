@@ -3,7 +3,15 @@ package com.example.bankcards.controller;
 import com.example.bankcards.dto.card.CardDto;
 import com.example.bankcards.dto.card.CreateCardDto;
 import com.example.bankcards.dto.card.Pageable;
+import com.example.bankcards.exception.ErrorResponse;
 import com.example.bankcards.service.card.CardService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,45 +21,98 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "ADMIN: Управление картами")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/admin/cards")
 @PreAuthorize("hasRole('ADMIN')")
+@ApiResponses({
+        @ApiResponse(responseCode = "403", description = "Отказано в доступе",
+                content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Ошибка со стороны сервера",
+                content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+}
+)
 public class AdminCardController {
     private final CardService cardService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Создание новой карты")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "CREATED"),
+            @ApiResponse(responseCode = "400", description = "Ошибка составления запроса",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Карта с таким номером уже существует",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     public CardDto createCard(@Valid @RequestBody CreateCardDto createCardDto) {
         return cardService.createCard(createCardDto);
     }
 
     @PatchMapping("/{cardId}/blocking")
-    public void blockingCard(@PathVariable UUID cardId) {
+    @Operation(summary = "Блокировка карты")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Карта не найдена",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public void blockingCard(@PathVariable @Parameter(description = "id блокируемой карты") UUID cardId) {
         cardService.blockingCard(cardId);
     }
 
     @PatchMapping("/{requestId}/blocking/byRequest")
-    public void blockingCardByRequest(@PathVariable UUID requestId) {
+    @Operation(summary = "Блокировка карты по запросу пользователя")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Запрос на блокировку карты не найден",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public void blockingCardByRequest(@PathVariable @Parameter(description = "id запроса на блокировку") UUID requestId) {
         cardService.blockingCardByRequest(requestId);
     }
 
     @PatchMapping("/{cardId}/activate")
-    public void activateCard(@PathVariable UUID cardId) {
+    @Operation(summary = "Активация карты")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Карта не найдена",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Истек срок действия карты",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public void activateCard(@PathVariable @Parameter(description = "id активируемой карты") UUID cardId) {
         cardService.activateCard(cardId);
     }
 
     @DeleteMapping("/{cardId}")
-    public void deleteCard(@PathVariable UUID cardId) {
+    @Operation(summary = "Удаление карты по id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Карта не найдена",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public void deleteCard(@PathVariable @Parameter(description = "id удаляемой карты") UUID cardId) {
         cardService.deleteCard(cardId);
     }
 
     @GetMapping("/{cardId}")
-    public CardDto getCardById(@PathVariable UUID cardId) {
+    @Operation(summary = "Получение информацию о карте по id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Карта не найдена",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public CardDto getCardById(@PathVariable
+                               @Parameter(description = "id карты, по которой нужно получить информацию") UUID cardId) {
         return cardService.getCardById(cardId);
     }
 
     @GetMapping
+    @Operation(summary = "Просмотр всех карт")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK")
+    })
     public List<CardDto> getAllCards(@Valid Pageable pageable) {
         return cardService.getAllCards(pageable);
     }

@@ -42,4 +42,10 @@ public class ErrorHandler {
     public ErrorResponse handleBadCredentialsException(final BadCredentialsException e) {
         return new ErrorResponse(e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleDuplicateException(final DuplicateException e) {
+        return new ErrorResponse(e.getMessage());
+    }
 }

@@ -21,6 +21,10 @@ spring:
     enabled: true
     change-log: classpath:/db/migration/db.changelog-master.yaml
 
+springdoc:
+  # don't generate responses from @ControllerAdvice
+  override-with-generic-response: false
+
 logging:
   level:
     org.springframework.security: DEBUG

@@ -8,6 +8,7 @@ import com.example.bankcards.entity.card.TransferOperation;
 import com.example.bankcards.entity.request.BlockingCardRequest;
 import com.example.bankcards.entity.request.BlockingCardStatus;
 import com.example.bankcards.entity.user.User;
+import com.example.bankcards.exception.DuplicateException;
 import com.example.bankcards.exception.NotFoundException;
 import com.example.bankcards.exception.ValidationException;
 import com.example.bankcards.repository.BlockingCardRequestRepository;
@@ -48,6 +49,9 @@ public class CardServiceImpl implements CardService {
                 new NotFoundException("Пользователь не найден"));
 
         String encryptedCardNumber = cardEncryptor.encrypt(createCardDto.getCardNumber());
+        if (cardRepository.existsByEncryptedCardNumber(encryptedCardNumber)) {
+            throw new DuplicateException("Карта с таким номером уже существует");
+        }
         String maskedCardNumber = CardConcealer.maskCardNumber(createCardDto.getCardNumber());
         Card card = cardRepository.save(CardMapper.mapCreateDtoToCard(owner, encryptedCardNumber, maskedCardNumber));
 
@@ -108,6 +112,8 @@ public class CardServiceImpl implements CardService {
     public void deleteCard(UUID cardID) {
         if (cardRepository.existsById(cardID)) {
             cardRepository.deleteById(cardID);
+        } else {
+            throw new NotFoundException("Карта не найдена");
         }
     }
 
@@ -211,7 +217,7 @@ public class CardServiceImpl implements CardService {
     }
 
     private Card findCardById(UUID cardId) {
-        log.info("Получаем карту по id = {}",cardId);
+        log.info("Получаем карту по id = {}", cardId);
         return cardRepository.findById(cardId).orElseThrow(() -> new NotFoundException("Карта не найдена"));
     }
 

@@ -1,1 +1,772 @@
-# Здесь будет OpenAPI описание всех доступных эндпоинтов и моделей данных.
+openapi: 3.1.0
+info:
+  title: Bank Rest Api
+  description: API системы управления банковскими картами
+  contact:
+    name: Andrey Sabitov
+    email: andrey.sabitoff@yandex.ru
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /v1/user/cards/{cardId}/blocking:
+    post:
+      tags:
+      - "USER: Действия с картами"
+      summary: Запрос блокировки карты текущего пользователя
+      operationId: addBlockingCardRequest
+      parameters:
+      - name: cardId
+        in: path
+        description: "id карты, блокировку которой нужно запросить"
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "201":
+          description: CREATED
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BlockingCardRequestDto"
+        "404":
+          description: Пользователь или карта не найдены
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Некорректный запрос
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/user/cards/transfer:
+    post:
+      tags:
+      - "USER: Действия с картами"
+      summary: Перевод денежных средств между картами текущего пользователя
+      operationId: transferBetweenCards
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransferBetweenCardsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Некорректно составлен запрос
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Не найден пользователь или карты
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/admin/users/create:
+    post:
+      tags:
+      - "ADMIN: Управление пользователями"
+      summary: Создание нового пользователя
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+        required: true
+      responses:
+        "201":
+          description: CREATED
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserDto"
+        "400":
+          description: Некорректно составлен запрос
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Имя пользователя и email должны быть уникальными
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/admin/cards:
+    get:
+      tags:
+      - "ADMIN: Управление картами"
+      summary: Просмотр всех карт
+      operationId: getAllCards
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CardDto"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags:
+      - "ADMIN: Управление картами"
+      summary: Создание новой карты
+      operationId: createCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCardDto"
+        required: true
+      responses:
+        "201":
+          description: CREATED
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CardDto"
+        "400":
+          description: Ошибка составления запроса
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Карта с таким номером уже существует
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /auth/sign-in:
+    post:
+      tags:
+      - Аутентификация
+      summary: Аутентификация пользователя
+      operationId: signIn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignInRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+        "400":
+          description: Не задано имя пользователя или пароль
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Пользователь не найден
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/admin/cards/{requestId}/blocking/byRequest:
+    patch:
+      tags:
+      - "ADMIN: Управление картами"
+      summary: Блокировка карты по запросу пользователя
+      operationId: blockingCardByRequest
+      parameters:
+      - name: requestId
+        in: path
+        description: id запроса на блокировку
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Запрос на блокировку карты не найден
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/admin/cards/{cardId}/blocking:
+    patch:
+      tags:
+      - "ADMIN: Управление картами"
+      summary: Блокировка карты
+      operationId: blockingCard
+      parameters:
+      - name: cardId
+        in: path
+        description: id блокируемой карты
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Карта не найдена
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/admin/cards/{cardId}/activate:
+    patch:
+      tags:
+      - "ADMIN: Управление картами"
+      summary: Активация карты
+      operationId: activateCard
+      parameters:
+      - name: cardId
+        in: path
+        description: id активируемой карты
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Карта не найдена
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Истек срок действия карты
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/user/cards:
+    get:
+      tags:
+      - "USER: Действия с картами"
+      summary: Просмотр всех карт текущего пользователя
+      operationId: getAllCardsByUser
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      - name: cardStatus
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - BLOCKED
+          - EXPIRED
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CardDto"
+        "400":
+          description: Некорректно составлен запрос
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Пользователь не найден
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/user/cards/{cardId}/balance:
+    get:
+      tags:
+      - "USER: Действия с картами"
+      summary: Просмотр баланса карты текущего пользователя
+      operationId: getCardBalance
+      parameters:
+      - name: cardId
+        in: path
+        description: "id карты, баланс которой нужно просмотреть"
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
+        "400":
+          description: Некорректно составлен запрос
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Не найден пользователь или карты
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/admin/cards/{cardId}:
+    get:
+      tags:
+      - "ADMIN: Управление картами"
+      summary: Получение информацию о карте по id
+      operationId: getCardById
+      parameters:
+      - name: cardId
+        in: path
+        description: "id карты, по которой нужно получить информацию"
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CardDto"
+        "404":
+          description: Карта не найдена
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags:
+      - "ADMIN: Управление картами"
+      summary: Удаление карты по id
+      operationId: deleteCard
+      parameters:
+      - name: cardId
+        in: path
+        description: id удаляемой карты
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Карта не найдена
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/admin/users/{userId}:
+    delete:
+      tags:
+      - "ADMIN: Управление пользователями"
+      summary: Удаление пользователя по id
+      operationId: deleteUser
+      parameters:
+      - name: userId
+        in: path
+        description: id удаляемого пользователя
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Пользователь не найден
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Отказано в доступе
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Ошибка со стороны сервера
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      description: Dto с сообщением об ошибке
+      properties:
+        message:
+          type: string
+          description: Текст ошибки
+          example: exception message
+    BlockingCardRequestDto:
+      type: object
+      description: Ответ на запрос блокировки карты пользователем
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: id запроса
+          example: fc5855a2-58d8-4148-9a54-277f3bcb60d8
+        cardId:
+          type: string
+          format: uuid
+          description: "id карты, которую нужно заблокировать"
+          example: fc5855a2-58d8-4148-9a54-277f3bcb60d8
+        initiatorId:
+          type: string
+          format: uuid
+          description: "id пользователя, запросившего блокировку"
+          example: fc5855a2-58d8-4148-9a54-277f3bcb60d8
+        state:
+          type: string
+          description: Статус запроса
+          enum:
+          - WAITING
+          - COMPLETED
+    TransferBetweenCardsRequest:
+      type: object
+      description: Dto для запроса перевода средств с карты на карту
+      properties:
+        fromCard:
+          type: string
+          format: uuid
+          description: id карты откуда нужно совершить перевод
+          example: 5545749c-5bb2-40a5-a049-52ecf74b2571
+        toCard:
+          type: string
+          format: uuid
+          description: id карты на которую нужно совершить перевод
+          example: 5545749c-5bb2-40a5-a049-52ecf74b2571
+        amount:
+          type: number
+          description: Сумма перевода
+          example: 100.0
+      required:
+      - amount
+      - fromCard
+      - toCard
+    CreateUserRequest:
+      type: object
+      description: Dto для создания нового пользователя
+      properties:
+        username:
+          type: string
+          description: Имя пользователя
+          example: Andy
+          maxLength: 50
+          minLength: 0
+        password:
+          type: string
+          description: Пароль
+          example: qwerty_best_password
+          maxLength: 255
+          minLength: 10
+        email:
+          type: string
+          description: Адрес электронной почты
+          example: example@mail.ru
+          minLength: 1
+      required:
+      - email
+      - password
+      - username
+    UserDto:
+      type: object
+      description: Пользователь
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: id пользователя
+          example: fc5855a2-58d8-4148-9a54-277f3bcb60d8
+        name:
+          type: string
+          description: Имя пользователя
+          example: Andy
+        email:
+          type: string
+          description: Адрес электронной почты пользователя
+          example: example@mail.ru
+    CreateCardDto:
+      type: object
+      description: Dto для передачи данных при создании новой карты
+      properties:
+        cardNumber:
+          type: string
+          description: Номер новой карты
+          example: 4111111111111111
+          minLength: 1
+        userId:
+          type: string
+          format: uuid
+          description: id владельца карты
+          example: 5545749c-5bb2-40a5-a049-52ecf74b2571
+      required:
+      - cardNumber
+      - userId
+    CardDto:
+      type: object
+      description: Dto для отображения информации о карте
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: id карты
+          example: fc5855a2-58d8-4148-9a54-277f3bcb60d8
+        maskedCardNumber:
+          type: string
+          description: Замаскированный номер карты
+          example: '**** **** **** 1111'
+        expirationDate:
+          type: string
+          format: date
+          description: Дата до которой действительно карта
+          example: 2035-08-11
+        balance:
+          type: number
+          description: Баланс карты
+          example: 0.0
+        username:
+          type: string
+          description: Имя хозяйна карты
+          example: Andy
+        status:
+          type: string
+          description: Статус карты
+          enum:
+          - ACTIVE
+          - BLOCKED
+          - EXPIRED
+    SignInRequest:
+      type: object
+      description: Запрос на аутентификацию
+      properties:
+        username:
+          type: string
+          description: Имя пользователя
+          example: Andy
+          minLength: 1
+        password:
+          type: string
+          description: Пароль
+          example: qwerty_best_password
+          minLength: 1
+      required:
+      - password
+      - username
+    TokenResponse:
+      type: object
+      description: Ответ с токеном доступа
+      properties:
+        token:
+          type: string
+          description: Токен доступа
+    Pageable:
+      type: object
+      description: Пагинация
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Номер страницы
+          example: 0
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          description: Размер страницы
+          example: 10
+          minimum: 1
+      required:
+      - page
+      - size
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
