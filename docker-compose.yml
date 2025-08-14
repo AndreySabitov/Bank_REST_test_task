@@ -9,6 +9,19 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_DB=card-db
 
+  bank_rest:
+    build: .
+    container_name: bank-rest-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://card-db:5432/card-db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=secret
+    depends_on:
+      - card-db
+
+
 #Что нужно сделать:
 #  - Настроить сервисы для:
 #      - PostgreSQL (или MySQL) с начальной базой.
