@@ -7,5 +7,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.UUID;
 
 public interface CardRepository extends JpaRepository<Card, UUID>, QuerydslPredicateExecutor<Card> {
-    boolean existsByEncryptedCardNumber(String encryptedCardNumber);
+    boolean existsByHash(String hash);
 }

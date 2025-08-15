@@ -14,8 +14,8 @@ spring:
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/card-db
-    username: admin
-    password: secret
+    username: ${POSTGRES_USERNAME:admin}
+    password: ${POSTGRES_PASSWORD:secret}
 
   liquibase:
     enabled: true
@@ -27,24 +27,21 @@ springdoc:
 
 logging:
   level:
-    org.springframework.security: DEBUG
-    org.springframework.security.web.FilterChainProxy: DEBUG
+    org.springframework.security: WARN
+    org.springframework.security.web.FilterChainProxy: WARN
 
 
 jwt:
-  secret: 3f7a9b2e5c8d1f6g4h0i9j2k5l7m8n1o3p6q9r2s4t7u0v1w5x8y2z
+  secret: ${JWT_SECRET:3f7a9b2e5c8d1f6g4h0i9j2k5l7m8n1o3p6q9r2s4t7u0v1w5x8y2z}
   expiration: 86400000
 
 encryptor:
-  password: "g@#$%^&*()_ABCDEFG1234567890"
+  password: ${ENCRYPTOR_PASSWORD:g@#$%^&*()_ABCDEFG1234567890}
+  salt: ${ENCRYPTOR_SALT:7342f2693f9c46d0}
 
 app:
   admin:
     name: admin
     password: password
-
-Что нужно сделать:
-  - Указать настройки подключения к базе данных.
-  - Указать порт приложения.
-  - Настроить параметры безопасности и JWT.
-  - Включить Swagger UI.
+  hashEncoder:
+    pepper: ${APP_HASHENCODER_PEPPER:5382h2673f4c47g0}

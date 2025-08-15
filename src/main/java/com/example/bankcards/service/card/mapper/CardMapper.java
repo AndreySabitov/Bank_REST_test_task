@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @UtilityClass
 public class CardMapper {
 
-    public Card mapCreateDtoToCard(User owner, String encryptedCardNumber, String maskedCardNumber) {
+    public Card mapCreateDtoToCard(User owner, String encryptedCardNumber, String maskedCardNumber, String hash) {
         return Card.builder()
                 .owner(owner)
                 .balance(BigDecimal.valueOf(0.0))
@@ -20,6 +20,7 @@ public class CardMapper {
                 .maskedCardNumber(maskedCardNumber)
                 .expirationDate(LocalDate.now().plusYears(10))
                 .status(CardStatus.BLOCKED)
+                .hash(hash)
                 .build();
     }
 

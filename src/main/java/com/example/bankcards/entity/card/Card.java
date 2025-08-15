@@ -37,4 +37,6 @@ public class Card {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User owner;
+
+    private String hash;
 }

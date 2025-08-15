@@ -1,17 +1,17 @@
 package com.example.bankcards.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class CardEncryptor {
     private final TextEncryptor encryptor;
 
-    public CardEncryptor(@Value("${encryptor.password}") String password) {
-        String salt = KeyGenerators.string().generateKey();
+    public CardEncryptor(@Value("${encryptor.password}") String password, @Value("${encryptor.salt}") String salt) {
         this.encryptor = Encryptors.text(password, salt);
     }
 

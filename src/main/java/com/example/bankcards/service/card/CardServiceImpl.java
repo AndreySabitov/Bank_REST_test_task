@@ -19,6 +19,7 @@ import com.example.bankcards.service.card.mapper.BlockingCardRequestMapper;
 import com.example.bankcards.service.card.mapper.CardMapper;
 import com.example.bankcards.util.CardConcealer;
 import com.example.bankcards.util.CardEncryptor;
+import com.example.bankcards.util.HashEncoder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,7 @@ public class CardServiceImpl implements CardService {
     private final TransferOperationRepository transferOperationRepository;
     private final BlockingCardRequestRepository blockingCardRequestRepository;
     private final CardEncryptor cardEncryptor;
+    private final HashEncoder hashEncoder;
 
     @Override
     @Transactional
@@ -48,12 +50,14 @@ public class CardServiceImpl implements CardService {
         User owner = userRepository.findById(createCardDto.getUserId()).orElseThrow(() ->
                 new NotFoundException("Пользователь не найден"));
 
-        String encryptedCardNumber = cardEncryptor.encrypt(createCardDto.getCardNumber());
-        if (cardRepository.existsByEncryptedCardNumber(encryptedCardNumber)) {
+        String hash = hashEncoder.getHash(createCardDto.getCardNumber());
+        if (cardRepository.existsByHash(hash)) {
             throw new DuplicateException("Карта с таким номером уже существует");
         }
+
+        String encryptedCardNumber = cardEncryptor.encrypt(createCardDto.getCardNumber());
         String maskedCardNumber = CardConcealer.maskCardNumber(createCardDto.getCardNumber());
-        Card card = cardRepository.save(CardMapper.mapCreateDtoToCard(owner, encryptedCardNumber, maskedCardNumber));
+        Card card = cardRepository.save(CardMapper.mapCreateDtoToCard(owner, encryptedCardNumber, maskedCardNumber, hash));
 
         return CardMapper.mapToDto(card);
     }
