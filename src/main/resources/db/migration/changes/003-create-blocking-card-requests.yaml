@@ -32,9 +32,11 @@ databaseChangeLog:
             referencedTableName: cards
             referencedColumnNames: id
             constraintName: fk_blocking_card_to_cards
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: blocking_card_requests
             baseColumnNames: initiator_id
             referencedTableName: users
             referencedColumnNames: id
             constraintName: fk_blocking_card_to_users
+            onDelete: CASCADE

@@ -32,9 +32,11 @@ databaseChangeLog:
             referencedTableName: cards
             referencedColumnNames: id
             constraintName: fk_from_card_to_card
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: transfer_operations
             baseColumnNames: to_card_id
             referencedTableName: cards
             referencedColumnNames: id
             constraintName: fk_to_card_to_card
+            onDelete: CASCADE

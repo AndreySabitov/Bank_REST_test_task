@@ -37,3 +37,4 @@ databaseChangeLog:
             referencedTableName: users
             referencedColumnNames: id
             constraintName: fk_cards_user_id
+            onDelete: CASCADE
