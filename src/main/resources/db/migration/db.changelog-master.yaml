@@ -1,3 +1,18 @@
 databaseChangeLog:
   - includeAll:
       path: db/migration/changes/
+  - preConditions:
+      - onFail: WARN
+      - onError: HALT
+      - or: # Объединяем условия через OR
+        - and: # Условия для PostgreSQL
+          - dbms:
+              type: postgresql
+              version: '>=15.0'
+          - runningAs:
+              username: admin
+        - and: # Условия для H2 (тесты)
+          - dbms:
+              type: h2
+          - runningAs:
+              username: SA

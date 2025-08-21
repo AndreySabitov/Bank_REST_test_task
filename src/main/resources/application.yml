@@ -29,6 +29,7 @@ logging:
   level:
     org.springframework.security: WARN
     org.springframework.security.web.FilterChainProxy: WARN
+    liquibase.precondition: WARN
 
 
 jwt:

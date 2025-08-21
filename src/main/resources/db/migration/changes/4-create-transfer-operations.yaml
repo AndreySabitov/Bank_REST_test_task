@@ -1,42 +1,48 @@
 databaseChangeLog:
   - changeSet:
-      id: 3
+      id: 4
       author: Sabitov
+      preConditions:
+        - onFail: CONTINUE  # Локальная обработка ошибки
+        - onError: HALT
+          not:
+            tableExists:
+              tableName: transfer_operations
       changes:
         - createTable:
-            tableName: blocking_card_requests
+            tableName: transfer_operations
             columns:
               - column:
                   name: id
                   type: uuid
                   constraints:
-                    primaryKey: true
+                    primary key: true
               - column:
-                  name: card_id
+                  name: from_card_id
                   type: uuid
                   constraints:
                     notNull: true
               - column:
-                  name: initiator_id
+                  name: to_card_id
                   type: uuid
                   constraints:
                     notNull: true
               - column:
-                  name: state
-                  type: varchar(50)
+                  name: amount
+                  type: decimal(19, 2)
                   constraints:
                     notNull: true
         - addForeignKeyConstraint:
-            baseTableName: blocking_card_requests
-            baseColumnNames: card_id
+            baseTableName: transfer_operations
+            baseColumnNames: from_card_id
             referencedTableName: cards
             referencedColumnNames: id
-            constraintName: fk_blocking_card_to_cards
+            constraintName: fk_from_card_to_card
             onDelete: CASCADE
         - addForeignKeyConstraint:
-            baseTableName: blocking_card_requests
-            baseColumnNames: initiator_id
-            referencedTableName: users
+            baseTableName: transfer_operations
+            baseColumnNames: to_card_id
+            referencedTableName: cards
             referencedColumnNames: id
-            constraintName: fk_blocking_card_to_users
+            constraintName: fk_to_card_to_card
             onDelete: CASCADE

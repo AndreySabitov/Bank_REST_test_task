@@ -2,6 +2,12 @@ databaseChangeLog:
   - changeSet:
       id: 1
       author: Sabitov
+      preConditions:
+        - onFail: CONTINUE  # Локальная обработка ошибки
+        - onError: HALT
+          not:
+            tableExists:
+              tableName: users
       changes:
         - createTable:
             tableName: users
