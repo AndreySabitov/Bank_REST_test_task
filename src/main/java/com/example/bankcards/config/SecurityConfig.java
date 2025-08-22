@@ -23,6 +23,10 @@ import java.util.List;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+/**
+ * Конфигурация безопасности приложения.
+ * Настраивает JWT-аутентификацию, ролевую модель и CORS-политики.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -31,6 +35,11 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final UserService userService;
 
+    /**
+     * Настройка правил доступа к API
+     *
+     * @param http объект конфигурации HTTP-безопасности
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)

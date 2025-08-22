@@ -6,6 +6,10 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
+/**
+ * Конфигурация OpenAPI.
+ * Настраивает информацию о приложении: title, description, version, contact.
+ */
 @OpenAPIDefinition(
         info = @Info(
                 title = "Bank Rest Api",
