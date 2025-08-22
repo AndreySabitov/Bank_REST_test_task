@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * Контроллер для управления пользователями администратором.
+ * Обрабатывает HTTP-запросы, связанные с управлением пользователями.
+ */
 @RequestMapping("/v1/admin/users")
 @Tag(name = "ADMIN: Управление пользователями")
 @RestController
@@ -33,6 +37,14 @@ import java.util.UUID;
 public class AdminUserController {
     private final UserService userService;
 
+    /**
+     * Создание нового пользователя
+     *
+     * @param createUserRequest содержит данные для создания нового пользователя
+     * @return UserDto с данными пользователя
+     * @see CreateUserRequest
+     * @see UserDto
+     */
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создание нового пользователя")
@@ -47,6 +59,11 @@ public class AdminUserController {
         return userService.createUser(createUserRequest);
     }
 
+    /**
+     * Удаление пользователя по ID
+     *
+     * @param userId идентификатор пользователя (UUID)
+     */
     @DeleteMapping("/{userId}")
     @Operation(summary = "Удаление пользователя по id")
     @ApiResponses({

@@ -24,6 +24,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Контроллер для управления картами пользователем.
+ * Обрабатывает HTTP-запросы, связанные с действиями пользователей с картами.
+ */
 @RequestMapping("/v1/user/cards")
 @Tag(name = "USER: Действия с картами")
 @RestController
@@ -38,6 +42,16 @@ import java.util.UUID;
 public class UserCardController {
     private final CardService cardService;
 
+    /**
+     * Получение пользователем информации о всех своих картах
+     *
+     * @param pageable   для пагинации
+     * @param cardStatus для фильтрации по статусу
+     * @return список CardDto с информацией о картах
+     * @see Pageable
+     * @see CardStatus
+     * @see CardDto
+     */
     @GetMapping
     @Operation(summary = "Просмотр всех карт текущего пользователя")
     @ApiResponses({
@@ -52,6 +66,13 @@ public class UserCardController {
         return cardService.getAllCardsByUser(pageable, cardStatus);
     }
 
+    /**
+     * Создание запроса на блокировку карты
+     *
+     * @param cardId идентификатор карты, которую нужно заблокировать (UUID)
+     * @return BlockingCardRequestDto с данными о созданном запросе на блокировку карты
+     * @see BlockingCardRequestDto
+     */
     @PostMapping("/{cardId}/blocking")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Запрос блокировки карты текущего пользователя")
@@ -67,6 +88,12 @@ public class UserCardController {
         return cardService.addBlockingCardRequest(cardId);
     }
 
+    /**
+     * Перевод денежных средств между картами пользователя
+     *
+     * @param transferRequest информация об исходной и целевой карте (UUID), а так же сумме перевода
+     * @see TransferBetweenCardsRequest
+     */
     @PostMapping("/transfer")
     @Operation(summary = "Перевод денежных средств между картами текущего пользователя")
     @ApiResponses({
@@ -80,6 +107,12 @@ public class UserCardController {
         cardService.transferBetweenCards(transferRequest);
     }
 
+    /**
+     * Просмотреть баланс карты
+     *
+     * @param cardId идентификатор карты пользователя (UUID)
+     * @return баланс карты
+     */
     @GetMapping("/{cardId}/balance")
     @Operation(summary = "Просмотр баланса карты текущего пользователя")
     @ApiResponses({

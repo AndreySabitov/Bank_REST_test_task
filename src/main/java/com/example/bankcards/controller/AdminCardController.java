@@ -21,6 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Контроллер для управления картами администратором.
+ * Обрабатывает HTTP-запросы, связанные с действиями администратора с картами пользователей.
+ */
 @Tag(name = "ADMIN: Управление картами")
 @RestController
 @RequiredArgsConstructor
@@ -36,6 +40,14 @@ import java.util.UUID;
 public class AdminCardController {
     private final CardService cardService;
 
+    /**
+     * Создание новой карты для пользователя администратором
+     *
+     * @param createCardDto информация необходимая для создания новой карты
+     * @return CardDto с данными о созданной карте
+     * @see CreateCardDto
+     * @see CardDto
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создание новой карты")
@@ -50,6 +62,11 @@ public class AdminCardController {
         return cardService.createCard(createCardDto);
     }
 
+    /**
+     * Блокировка карты по ID
+     *
+     * @param cardId идентификатор карты для блокировки (UUID)
+     */
     @PatchMapping("/{cardId}/blocking")
     @Operation(summary = "Блокировка карты")
     @ApiResponses({
@@ -61,6 +78,11 @@ public class AdminCardController {
         cardService.blockingCard(cardId);
     }
 
+    /**
+     * Блокировка карты по запросу пользователя
+     *
+     * @param requestId идентификатор запроса на блокировку карты (UUID)
+     */
     @PatchMapping("/{requestId}/blocking/byRequest")
     @Operation(summary = "Блокировка карты по запросу пользователя")
     @ApiResponses({
@@ -72,6 +94,11 @@ public class AdminCardController {
         cardService.blockingCardByRequest(requestId);
     }
 
+    /**
+     * Активация карты по ID
+     *
+     * @param cardId идентификатор карты, которую необходимо активировать (UUID)
+     */
     @PatchMapping("/{cardId}/activate")
     @Operation(summary = "Активация карты")
     @ApiResponses({
@@ -85,6 +112,11 @@ public class AdminCardController {
         cardService.activateCard(cardId);
     }
 
+    /**
+     * Удаление карты по ID
+     *
+     * @param cardId идентификатор карты, которую нужно удалить (UUID)
+     */
     @DeleteMapping("/{cardId}")
     @Operation(summary = "Удаление карты по id")
     @ApiResponses({
@@ -96,6 +128,13 @@ public class AdminCardController {
         cardService.deleteCard(cardId);
     }
 
+    /**
+     * Получение информации о карте по ID
+     *
+     * @param cardId идентификатор карты (UUID)
+     * @return CardDto с данными карты
+     * @see CardDto
+     */
     @GetMapping("/{cardId}")
     @Operation(summary = "Получение информацию о карте по id")
     @ApiResponses({
@@ -108,6 +147,12 @@ public class AdminCardController {
         return cardService.getCardById(cardId);
     }
 
+    /**
+     * Получение информации о всех картах
+     *
+     * @return Список CardDto с данными о всех картах
+     * @see CardDto
+     */
     @GetMapping
     @Operation(summary = "Просмотр всех карт")
     @ApiResponses({

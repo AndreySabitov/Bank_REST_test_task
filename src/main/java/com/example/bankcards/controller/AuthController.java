@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Контроллер для аутентификации.
+ */
 @Tag(name = "Аутентификация")
 @RestController
 @RequestMapping("/auth")
@@ -24,6 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthenticationService authenticationService;
 
+    /**
+     * Аутентификация пользователя
+     *
+     * @param signInRequest данные для аутентификации пользователя
+     * @return TokenResponse с JWT - токеном
+     * @see SignInRequest
+     * @see TokenResponse
+     */
     @PostMapping("/sign-in")
     @Operation(summary = "Аутентификация пользователя")
     @ApiResponses({
@@ -37,7 +48,7 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Ошибка со стороны сервера",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public TokenResponse signIn(@RequestBody @Valid SignInRequest request) {
-        return authenticationService.signIn(request);
+    public TokenResponse signIn(@RequestBody @Valid SignInRequest signInRequest) {
+        return authenticationService.signIn(signInRequest);
     }
 }
