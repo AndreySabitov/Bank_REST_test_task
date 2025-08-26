@@ -167,10 +167,8 @@ public class CardServiceImpl implements CardService {
      * @return список {@link CardDto} с информацией о картах
      */
     @Override
-    public List<CardDto> getAllCards(Pageable pageable) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPage(), pageable.getSize());
-
-        return cardRepository.findAll(pageRequest).stream()
+    public List<CardDto> getAllCards() {
+        return cardRepository.findAll().stream()
                 .map(CardMapper::mapToDto)
                 .toList();
     }

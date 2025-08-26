@@ -2,7 +2,6 @@ package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.card.CardDto;
 import com.example.bankcards.dto.card.CreateCardDto;
-import com.example.bankcards.dto.card.Pageable;
 import com.example.bankcards.exception.ErrorResponse;
 import com.example.bankcards.service.card.CardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -154,7 +153,7 @@ public class AdminCardController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")
     })
-    public List<CardDto> getAllCards(@Valid Pageable pageable) {
-        return cardService.getAllCards(pageable);
+    public List<CardDto> getAllCards() {
+        return cardService.getAllCards();
     }
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Репозиторий для работы с сущностью User в базе данных
+ * Репозиторий для работы с сущностью {@link User} в базе данных
  */
 public interface UserRepository extends JpaRepository<User, UUID> {
     /**
@@ -25,8 +25,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * Проверяет существование пользователя с указанным именем.
      *
      * @param name проверяемое имя пользователя
-     * @return {@code true} если пользователь с таким именем существует,
-     *         {@code false} в противном случае
+     * @return {@code true} если пользователь с таким именем существует, {@code false} в противном случае
      */
     boolean existsByName(String name);
 
@@ -37,8 +36,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * в email-адресе учитывается при проверке.
      *
      * @param email проверяемый адрес электронной почты
-     * @return {@code true} если пользователь с таким email существует,
-     *         {@code false} в противном случае
+     * @return {@code true} если пользователь с таким email существует, {@code false} в противном случае
      */
     boolean existsByEmail(String email);
 }

@@ -132,7 +132,7 @@ class AdminCardControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testGetAllCards() throws Exception {
-        when(cardService.getAllCards(any())).thenReturn(List.of(cardDto));
+        when(cardService.getAllCards()).thenReturn(List.of(cardDto));
 
         mvc.perform(get("/v1/admin/cards")
                         .accept(MediaType.APPLICATION_JSON)
@@ -142,6 +142,6 @@ class AdminCardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
 
-        verify(cardService, times(1)).getAllCards(any());
+        verify(cardService, times(1)).getAllCards();
     }
 }

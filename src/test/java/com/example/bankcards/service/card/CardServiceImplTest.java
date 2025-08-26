@@ -148,7 +148,7 @@ class CardServiceImplTest {
 
     @Test
     void checkReturnEmptyList_IfGetAllCardsButCardsNotExists() {
-        List<CardDto> cardDtoList = cardService.getAllCards(new Pageable(0, 10));
+        List<CardDto> cardDtoList = cardService.getAllCards();
 
         assertTrue(cardDtoList.isEmpty());
     }
@@ -158,7 +158,7 @@ class CardServiceImplTest {
         userRepository.save(user);
         cardRepository.save(card);
 
-        List<CardDto> cardDtoList = cardService.getAllCards(new Pageable(0, 10));
+        List<CardDto> cardDtoList = cardService.getAllCards();
 
         assertFalse(cardDtoList.isEmpty());
         assertEquals(1, cardDtoList.size());

@@ -20,7 +20,7 @@ public interface CardService {
 
     CardDto getCardById(UUID cardId);
 
-    List<CardDto> getAllCards(Pageable pageable);
+    List<CardDto> getAllCards();
 
     List<CardDto> getAllCardsByUser(Pageable pageable, CardStatus cardStatus);
 
