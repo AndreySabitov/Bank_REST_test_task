@@ -8,6 +8,14 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+/**
+ * Сущность, описывающая перевод денежных средств между двумя картами.
+ * <p>
+ * Содержит информацию о переводе:
+ * <li>Идентификатор исходной карты</li>
+ * <li>Идентификатор целевой карты</li>
+ * <li>Сумма перевода</li>
+ */
 @Entity
 @Table(name = "transfer_operations")
 @NoArgsConstructor

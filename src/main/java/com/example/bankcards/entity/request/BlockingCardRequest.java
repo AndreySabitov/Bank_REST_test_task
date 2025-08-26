@@ -7,6 +7,14 @@ import lombok.*;
 
 import java.util.UUID;
 
+/**
+ * Сущность, описывающая запрос на блокировку карты пользователем.
+ * <p>
+ * Содержит информацию:
+ * <li>Ссылка на блокируемую карту {@link Card}</li>
+ * <li>Ссылка на инициатора блокировки {@link User}</li>
+ * <li>Статус запроса на блокировку {@link BlockingCardStatus}</li>
+ */
 @Entity
 @Table(name = "blocking_card_requests")
 @NoArgsConstructor

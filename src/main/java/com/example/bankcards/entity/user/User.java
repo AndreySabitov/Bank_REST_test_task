@@ -13,6 +13,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Сущность, которая описывает пользователя.
+ * <p>
+ * Содержит информацию о пользователе:
+ * <li>Имя пользователя</li>
+ * <li>Пароль в зашифрованном виде</li>
+ * <li>email</li>
+ * <li>Роль {@link Role}</li>
+ */
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
