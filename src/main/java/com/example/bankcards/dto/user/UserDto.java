@@ -6,6 +6,9 @@ import lombok.Getter;
 
 import java.util.UUID;
 
+/**
+ * DTO с информацией о пользователе
+ */
 @Schema(description = "Пользователь")
 @Getter
 @Builder

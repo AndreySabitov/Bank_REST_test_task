@@ -9,6 +9,9 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+/**
+ * DTO для передачи информации об искомой и целевой картах для перевода, а так же о сумме перевода
+ */
 @Schema(description = "Dto для запроса перевода средств с карты на карту")
 @Getter
 @AllArgsConstructor

@@ -7,11 +7,14 @@ import lombok.Getter;
 
 import java.util.UUID;
 
+/**
+ * DTO, который содержит информацию о созданном запросе на блокировку карты.
+ */
 @Schema(description = "Ответ на запрос блокировки карты пользователем")
 @Getter
 @Builder
 public class BlockingCardRequestDto {
-    @Schema(description = "id запроса",example = "fc5855a2-58d8-4148-9a54-277f3bcb60d8")
+    @Schema(description = "id запроса", example = "fc5855a2-58d8-4148-9a54-277f3bcb60d8")
     private UUID id;
     @Schema(description = "id карты, которую нужно заблокировать", example = "fc5855a2-58d8-4148-9a54-277f3bcb60d8")
     private UUID cardId;

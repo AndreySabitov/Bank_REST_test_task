@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * DTO для передачи данных для создания нового пользователя
+ */
 @Schema(description = "Dto для создания нового пользователя")
 @Getter
 @Builder

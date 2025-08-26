@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * DTO для передачи данных для аутентификации в приложении.
+ * Содержит username и password.
+ */
 @Schema(description = "Запрос на аутентификацию")
 @Getter
 @AllArgsConstructor

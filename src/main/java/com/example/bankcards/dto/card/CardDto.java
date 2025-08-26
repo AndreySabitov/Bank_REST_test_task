@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * DTO для передачи информации о карте
+ */
 @Schema(description = "Dto для отображения информации о карте")
 @Getter
 @Builder

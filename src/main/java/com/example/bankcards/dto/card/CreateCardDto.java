@@ -9,6 +9,9 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 
 import java.util.UUID;
 
+/**
+ * DTO для передачи информации для создания новой карты
+ */
 @Schema(description = "Dto для передачи данных при создании новой карты")
 @Getter
 @Builder

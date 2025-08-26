@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Содержит номер страницы и её размер
+ */
 @Schema(description = "Пагинация")
 @Getter
 @Setter
