@@ -45,12 +45,9 @@ public class UserCardController {
     /**
      * Получение пользователем информации о всех своих картах
      *
-     * @param pageable   для пагинации
-     * @param cardStatus для фильтрации по статусу
-     * @return список CardDto с информацией о картах
-     * @see Pageable
-     * @see CardStatus
-     * @see CardDto
+     * @param pageable для пагинации ({@link Pageable})
+     * @param cardStatus для фильтрации по статусу ({@link CardStatus})
+     * @return список {@link CardDto} с информацией о картах
      */
     @GetMapping
     @Operation(summary = "Просмотр всех карт текущего пользователя")
@@ -69,9 +66,8 @@ public class UserCardController {
     /**
      * Создание запроса на блокировку карты
      *
-     * @param cardId идентификатор карты, которую нужно заблокировать (UUID)
-     * @return BlockingCardRequestDto с данными о созданном запросе на блокировку карты
-     * @see BlockingCardRequestDto
+     * @param cardId идентификатор карты, которую нужно заблокировать ({@link UUID})
+     * @return {@link BlockingCardRequestDto} с данными о созданном запросе на блокировку карты
      */
     @PostMapping("/{cardId}/blocking")
     @ResponseStatus(HttpStatus.CREATED)
@@ -91,8 +87,7 @@ public class UserCardController {
     /**
      * Перевод денежных средств между картами пользователя
      *
-     * @param transferRequest информация об исходной и целевой карте (UUID), а так же сумме перевода
-     * @see TransferBetweenCardsRequest
+     * @param transferRequest информация об исходной и целевой карте, а так же сумме перевода. ({@link TransferBetweenCardsRequest})
      */
     @PostMapping("/transfer")
     @Operation(summary = "Перевод денежных средств между картами текущего пользователя")
@@ -110,7 +105,7 @@ public class UserCardController {
     /**
      * Просмотреть баланс карты
      *
-     * @param cardId идентификатор карты пользователя (UUID)
+     * @param cardId идентификатор карты пользователя ({@link UUID})
      * @return баланс карты
      */
     @GetMapping("/{cardId}/balance")

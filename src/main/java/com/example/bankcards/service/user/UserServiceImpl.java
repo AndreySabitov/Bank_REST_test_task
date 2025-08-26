@@ -24,10 +24,8 @@ public class UserServiceImpl implements UserService {
     /**
      * Создание нового пользователя
      *
-     * @param request dto с необходимой информацией для создания нового пользователя
-     * @return UserDto с информацией о новом пользователе
-     * @see CreateUserRequest
-     * @see UserDto
+     * @param request dto с необходимой информацией для создания нового пользователя ({@link CreateUserRequest})
+     * @return {@link UserDto} с информацией о новом пользователе
      */
     @Override
     public UserDto createUser(CreateUserRequest request) {
@@ -48,7 +46,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Удаление пользователя по ID
      *
-     * @param userId идентификатор пользователя (UUID)
+     * @param userId идентификатор пользователя ({@link UUID})
      */
     @Override
     public void deleteUserById(UUID userId) {
@@ -63,7 +61,7 @@ public class UserServiceImpl implements UserService {
      * Получение пользователя по имени
      *
      * @param username имя пользователя
-     * @return UserDetails с информацией о пользователе
+     * @return {@link UserDetails} с информацией о пользователе
      */
     @Override
     public UserDetails loadUserByUsername(String username) {

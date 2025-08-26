@@ -50,10 +50,8 @@ public class CardServiceImpl implements CardService {
     /**
      * Создание новой карты
      *
-     * @param createCardDto содержит необходимую информацию для создания новой карты
-     * @return CardDto с информацией о новой карте
-     * @see CreateCardDto
-     * @see CardDto
+     * @param createCardDto содержит необходимую информацию для создания новой карты ({@link CreateCardDto})
+     * @return {@link CardDto} с информацией о новой карте
      */
     @Override
     @Transactional
@@ -76,7 +74,7 @@ public class CardServiceImpl implements CardService {
     /**
      * Блокировка карты по ID
      *
-     * @param cardId идентификатор блокируемой карты (UUID)
+     * @param cardId идентификатор блокируемой карты ({@link UUID})
      */
     @Override
     @Transactional
@@ -94,7 +92,7 @@ public class CardServiceImpl implements CardService {
     /**
      * Блокировка карты по запросу пользователя
      *
-     * @param requestId идентификатор запроса на блокировку карты (UUID)
+     * @param requestId идентификатор запроса на блокировку карты ({@link UUID})
      */
     @Override
     @Transactional
@@ -119,7 +117,7 @@ public class CardServiceImpl implements CardService {
     /**
      * Активация карты по ID
      *
-     * @param cardId идентификатор активируемой карты (UUID)
+     * @param cardId идентификатор активируемой карты ({@link UUID})
      */
     @Override
     @Transactional
@@ -140,7 +138,7 @@ public class CardServiceImpl implements CardService {
     /**
      * Удаление карты по ID
      *
-     * @param cardID идентификатор удаляемой карты (UUID)
+     * @param cardID идентификатор удаляемой карты ({@link UUID})
      */
     @Override
     @Transactional
@@ -155,9 +153,8 @@ public class CardServiceImpl implements CardService {
     /**
      * Получение информации о карте по ID
      *
-     * @param cardId идентификатор карты (UUID)
-     * @return CardDto с информацией о карте
-     * @see CardDto
+     * @param cardId идентификатор карты ({@link UUID})
+     * @return {@link CardDto} с информацией о карте
      */
     @Override
     public CardDto getCardById(UUID cardId) {
@@ -167,7 +164,7 @@ public class CardServiceImpl implements CardService {
     /**
      * Получение всех карт
      *
-     * @return список CardDto с информацией о картах
+     * @return список {@link CardDto} с информацией о картах
      */
     @Override
     public List<CardDto> getAllCards(Pageable pageable) {
@@ -181,9 +178,9 @@ public class CardServiceImpl implements CardService {
     /**
      * Получение всех карт пользователя
      *
-     * @param pageable параметры пагинации
-     * @param cardStatus статус карт для фильтрации по статусу
-     * @return список CardDto с информацией по каждой карте
+     * @param pageable   параметры пагинации ({@link Pageable})
+     * @param cardStatus статус карт для фильтрации по статусу ({@link CardStatus})
+     * @return список {@link CardDto} с информацией по каждой карте
      */
     @Override
     public List<CardDto> getAllCardsByUser(Pageable pageable, CardStatus cardStatus) {
@@ -205,9 +202,8 @@ public class CardServiceImpl implements CardService {
     /**
      * Создание запроса на блокировку карты пользователем
      *
-     * @param cardId идентификатор карты, которую нужно заблокировать (UUID)
-     * @return BlockingCardRequestDto с информацией о созданном запросе на блокировку карты
-     * @see BlockingCardRequestDto
+     * @param cardId идентификатор карты, которую нужно заблокировать ({@link UUID})
+     * @return {@link BlockingCardRequestDto} с информацией о созданном запросе на блокировку карты
      */
     @Override
     @Transactional
@@ -237,8 +233,7 @@ public class CardServiceImpl implements CardService {
     /**
      * Перевод денежных средств между картами пользователя
      *
-     * @param transferRequest dto с информацией необходимой для перевода между картами пользователя
-     * @see TransferBetweenCardsRequest
+     * @param transferRequest dto с информацией необходимой для перевода между картами пользователя ({@link TransferBetweenCardsRequest})
      */
     @Override
     @Transactional
@@ -274,7 +269,7 @@ public class CardServiceImpl implements CardService {
     /**
      * Получение баланса карты пользователя
      *
-     * @param cardId идентификатор карты (UUID)
+     * @param cardId идентификатор карты ({@link UUID})
      * @return баланс карты
      */
     @Override

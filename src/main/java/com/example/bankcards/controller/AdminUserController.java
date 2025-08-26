@@ -40,10 +40,8 @@ public class AdminUserController {
     /**
      * Создание нового пользователя
      *
-     * @param createUserRequest содержит данные для создания нового пользователя
-     * @return UserDto с данными пользователя
-     * @see CreateUserRequest
-     * @see UserDto
+     * @param createUserRequest содержит данные для создания нового пользователя ({@link CreateUserRequest})
+     * @return {@link UserDto} с данными пользователя
      */
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,7 +60,7 @@ public class AdminUserController {
     /**
      * Удаление пользователя по ID
      *
-     * @param userId идентификатор пользователя (UUID)
+     * @param userId идентификатор пользователя ({@link UUID})
      */
     @DeleteMapping("/{userId}")
     @Operation(summary = "Удаление пользователя по id")

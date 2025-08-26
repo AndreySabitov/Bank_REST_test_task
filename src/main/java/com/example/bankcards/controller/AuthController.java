@@ -30,10 +30,8 @@ public class AuthController {
     /**
      * Аутентификация пользователя
      *
-     * @param signInRequest данные для аутентификации пользователя
-     * @return TokenResponse с JWT - токеном
-     * @see SignInRequest
-     * @see TokenResponse
+     * @param signInRequest данные для аутентификации пользователя ({@link SignInRequest})
+     * @return {@link TokenResponse} с JWT - токеном
      */
     @PostMapping("/sign-in")
     @Operation(summary = "Аутентификация пользователя")

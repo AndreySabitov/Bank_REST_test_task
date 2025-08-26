@@ -24,7 +24,7 @@ public class JwtTokenService {
     /**
      * Создание JWT - токена на основе информации о пользователе
      *
-     * @param userDetails содержит информацию о пользователе
+     * @param userDetails содержит информацию о пользователе ({@link UserDetails})
      * @return JWT - токен
      */
     public String createToken(UserDetails userDetails) {
@@ -50,8 +50,8 @@ public class JwtTokenService {
      * Проверка валидности токена (соответствия пользователя, времени действия токена)
      *
      * @param token       JWT - токен
-     * @param userDetails информация о пользователе
-     * @return true/false
+     * @param userDetails информация о пользователе ({@link UserDetails})
+     * @return {@code true} если токен валидный, в противном случае - {@code false}
      */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         String username = extractUsername(token);

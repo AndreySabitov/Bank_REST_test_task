@@ -41,9 +41,9 @@ public class JwtFilter extends OncePerRequestFilter {
      *   <li>Устанавливает аутентификацию в контекст безопасности</li>
      * </ol>
      *
-     * @param request HTTP-запрос
-     * @param response HTTP-ответ
-     * @param filterChain цепочка фильтров для продолжения обработки
+     * @param request HTTP-запрос ({@link HttpServletRequest})
+     * @param response HTTP-ответ ({@link HttpServletResponse})
+     * @param filterChain цепочка фильтров для продолжения обработки ({@link FilterChain})
      * @throws ServletException при ошибках обработки запроса
      * @throws IOException при ошибках ввода-вывода
      */

@@ -22,8 +22,7 @@ public class AuthenticationService {
      * Аутентификация пользователя
      *
      * @param signInRequest данные для аутентификации пользователя
-     * @return TokenResponse, который содержит JWT - токен
-     * @see TokenResponse
+     * @return {@link TokenResponse}, который содержит JWT - токен
      */
     public TokenResponse signIn(SignInRequest signInRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

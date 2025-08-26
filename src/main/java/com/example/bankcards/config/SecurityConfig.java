@@ -38,7 +38,7 @@ public class SecurityConfig {
     /**
      * Настройка правил доступа к API
      *
-     * @param http объект конфигурации HTTP-безопасности
+     * @param http объект конфигурации HTTP-безопасности ({@link HttpSecurity})
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

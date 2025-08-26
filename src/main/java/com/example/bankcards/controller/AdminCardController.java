@@ -43,10 +43,8 @@ public class AdminCardController {
     /**
      * Создание новой карты для пользователя администратором
      *
-     * @param createCardDto информация необходимая для создания новой карты
-     * @return CardDto с данными о созданной карте
-     * @see CreateCardDto
-     * @see CardDto
+     * @param createCardDto информация необходимая для создания новой карты ({@link CreateCardDto})
+     * @return {@link CardDto} с данными о созданной карте
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -65,7 +63,7 @@ public class AdminCardController {
     /**
      * Блокировка карты по ID
      *
-     * @param cardId идентификатор карты для блокировки (UUID)
+     * @param cardId идентификатор карты для блокировки ({@link UUID})
      */
     @PatchMapping("/{cardId}/blocking")
     @Operation(summary = "Блокировка карты")
@@ -81,7 +79,7 @@ public class AdminCardController {
     /**
      * Блокировка карты по запросу пользователя
      *
-     * @param requestId идентификатор запроса на блокировку карты (UUID)
+     * @param requestId идентификатор запроса на блокировку карты ({@link UUID})
      */
     @PatchMapping("/{requestId}/blocking/byRequest")
     @Operation(summary = "Блокировка карты по запросу пользователя")
@@ -97,7 +95,7 @@ public class AdminCardController {
     /**
      * Активация карты по ID
      *
-     * @param cardId идентификатор карты, которую необходимо активировать (UUID)
+     * @param cardId идентификатор карты, которую необходимо активировать ({@link UUID})
      */
     @PatchMapping("/{cardId}/activate")
     @Operation(summary = "Активация карты")
@@ -115,7 +113,7 @@ public class AdminCardController {
     /**
      * Удаление карты по ID
      *
-     * @param cardId идентификатор карты, которую нужно удалить (UUID)
+     * @param cardId идентификатор карты, которую нужно удалить ({@link UUID})
      */
     @DeleteMapping("/{cardId}")
     @Operation(summary = "Удаление карты по id")
@@ -131,9 +129,8 @@ public class AdminCardController {
     /**
      * Получение информации о карте по ID
      *
-     * @param cardId идентификатор карты (UUID)
-     * @return CardDto с данными карты
-     * @see CardDto
+     * @param cardId идентификатор карты ({@link UUID})
+     * @return {@link CardDto} с данными карты
      */
     @GetMapping("/{cardId}")
     @Operation(summary = "Получение информацию о карте по id")
@@ -150,8 +147,7 @@ public class AdminCardController {
     /**
      * Получение информации о всех картах
      *
-     * @return Список CardDto с данными о всех картах
-     * @see CardDto
+     * @return Список {@link CardDto} с данными о всех картах
      */
     @GetMapping
     @Operation(summary = "Просмотр всех карт")
