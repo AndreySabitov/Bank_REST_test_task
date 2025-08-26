@@ -72,7 +72,7 @@ class UserServiceImplTest {
 
     @Test
     void checkThrowNotFoundException_whenTryGetUserByUsernameAndUserNotExists() {
-        assertThrows(NotFoundException.class, () -> userService.getByUsername("name"));
+        assertThrows(NotFoundException.class, () -> userService.loadUserByUsername("name"));
     }
 
     @Test
@@ -83,7 +83,7 @@ class UserServiceImplTest {
                 .email("name@mail.ru")
                 .build());
 
-        User findedUser = userService.getByUsername("name");
+        User findedUser = (User) userService.loadUserByUsername("name");
 
         assertNotNull(findedUser);
         assertEquals(user.getName(), findedUser.getName());

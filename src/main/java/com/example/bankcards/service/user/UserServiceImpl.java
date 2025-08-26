@@ -9,16 +9,26 @@ import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.service.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Сервис для управления пользователями
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
+    /**
+     * Создание нового пользователя
+     *
+     * @param request dto с необходимой информацией для создания нового пользователя
+     * @return UserDto с информацией о новом пользователе
+     * @see CreateUserRequest
+     * @see UserDto
+     */
     @Override
     public UserDto createUser(CreateUserRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -31,11 +41,15 @@ public class UserServiceImpl implements UserService {
         return UserMapper.mapToDto(userRepository.save(UserMapper.mapCreateDtoToUser(request)));
     }
 
-    @Override
-    public User getByUsername(String username) {
+    private User getByUsername(String username) {
         return userRepository.findByName(username).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }
 
+    /**
+     * Удаление пользователя по ID
+     *
+     * @param userId идентификатор пользователя (UUID)
+     */
     @Override
     public void deleteUserById(UUID userId) {
         if (userRepository.existsById(userId)) {
@@ -45,8 +59,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Получение пользователя по имени
+     *
+     * @param username имя пользователя
+     * @return UserDetails с информацией о пользователе
+     */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         return getByUsername(username);
     }
 }

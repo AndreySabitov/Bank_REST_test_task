@@ -32,6 +32,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Сервисный класс для управления картами
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -44,6 +47,14 @@ public class CardServiceImpl implements CardService {
     private final CardEncryptor cardEncryptor;
     private final HashEncoder hashEncoder;
 
+    /**
+     * Создание новой карты
+     *
+     * @param createCardDto содержит необходимую информацию для создания новой карты
+     * @return CardDto с информацией о новой карте
+     * @see CreateCardDto
+     * @see CardDto
+     */
     @Override
     @Transactional
     public CardDto createCard(CreateCardDto createCardDto) {
@@ -62,6 +73,11 @@ public class CardServiceImpl implements CardService {
         return CardMapper.mapToDto(card);
     }
 
+    /**
+     * Блокировка карты по ID
+     *
+     * @param cardId идентификатор блокируемой карты (UUID)
+     */
     @Override
     @Transactional
     public void blockingCard(UUID cardId) {
@@ -75,6 +91,11 @@ public class CardServiceImpl implements CardService {
         card.setStatus(CardStatus.BLOCKED);
     }
 
+    /**
+     * Блокировка карты по запросу пользователя
+     *
+     * @param requestId идентификатор запроса на блокировку карты (UUID)
+     */
     @Override
     @Transactional
     public void blockingCardByRequest(UUID requestId) {
@@ -95,6 +116,11 @@ public class CardServiceImpl implements CardService {
         blockingRequest.setState(BlockingCardStatus.COMPLETED);
     }
 
+    /**
+     * Активация карты по ID
+     *
+     * @param cardId идентификатор активируемой карты (UUID)
+     */
     @Override
     @Transactional
     public void activateCard(UUID cardId) {
@@ -111,6 +137,11 @@ public class CardServiceImpl implements CardService {
         card.setStatus(CardStatus.ACTIVE);
     }
 
+    /**
+     * Удаление карты по ID
+     *
+     * @param cardID идентификатор удаляемой карты (UUID)
+     */
     @Override
     @Transactional
     public void deleteCard(UUID cardID) {
@@ -121,11 +152,23 @@ public class CardServiceImpl implements CardService {
         }
     }
 
+    /**
+     * Получение информации о карте по ID
+     *
+     * @param cardId идентификатор карты (UUID)
+     * @return CardDto с информацией о карте
+     * @see CardDto
+     */
     @Override
     public CardDto getCardById(UUID cardId) {
         return CardMapper.mapToDto(findCardById(cardId));
     }
 
+    /**
+     * Получение всех карт
+     *
+     * @return список CardDto с информацией о картах
+     */
     @Override
     public List<CardDto> getAllCards(Pageable pageable) {
         PageRequest pageRequest = PageRequest.of(pageable.getPage(), pageable.getSize());
@@ -135,6 +178,13 @@ public class CardServiceImpl implements CardService {
                 .toList();
     }
 
+    /**
+     * Получение всех карт пользователя
+     *
+     * @param pageable параметры пагинации
+     * @param cardStatus статус карт для фильтрации по статусу
+     * @return список CardDto с информацией по каждой карте
+     */
     @Override
     public List<CardDto> getAllCardsByUser(Pageable pageable, CardStatus cardStatus) {
         UUID userId = getCurrentUser().getId();
@@ -152,6 +202,13 @@ public class CardServiceImpl implements CardService {
                 .toList();
     }
 
+    /**
+     * Создание запроса на блокировку карты пользователем
+     *
+     * @param cardId идентификатор карты, которую нужно заблокировать (UUID)
+     * @return BlockingCardRequestDto с информацией о созданном запросе на блокировку карты
+     * @see BlockingCardRequestDto
+     */
     @Override
     @Transactional
     public BlockingCardRequestDto addBlockingCardRequest(UUID cardId) {
@@ -177,6 +234,12 @@ public class CardServiceImpl implements CardService {
         return BlockingCardRequestMapper.mapToDto(blockingCardRequestRepository.save(request));
     }
 
+    /**
+     * Перевод денежных средств между картами пользователя
+     *
+     * @param transferRequest dto с информацией необходимой для перевода между картами пользователя
+     * @see TransferBetweenCardsRequest
+     */
     @Override
     @Transactional
     public void transferBetweenCards(TransferBetweenCardsRequest transferRequest) {
@@ -208,6 +271,12 @@ public class CardServiceImpl implements CardService {
                 .build());
     }
 
+    /**
+     * Получение баланса карты пользователя
+     *
+     * @param cardId идентификатор карты (UUID)
+     * @return баланс карты
+     */
     @Override
     public BigDecimal getBalance(UUID cardId) {
         User owner = getCurrentUser();

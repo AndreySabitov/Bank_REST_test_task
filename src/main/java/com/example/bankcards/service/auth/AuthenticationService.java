@@ -8,6 +8,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+/**
+ * Сервис аутентификации пользователей
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -15,13 +18,20 @@ public class AuthenticationService {
     private final JwtTokenService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public TokenResponse signIn(SignInRequest request) {
+    /**
+     * Аутентификация пользователя
+     *
+     * @param signInRequest данные для аутентификации пользователя
+     * @return TokenResponse, который содержит JWT - токен
+     * @see TokenResponse
+     */
+    public TokenResponse signIn(SignInRequest signInRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
-                request.getPassword()
+                signInRequest.getUsername(),
+                signInRequest.getPassword()
         ));
 
-        var user = userService.loadUserByUsername(request.getUsername());
+        var user = userService.loadUserByUsername(signInRequest.getUsername());
 
         var jwt = jwtService.createToken(user);
         return new TokenResponse(jwt);
