@@ -5,5 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
+/**
+ * Репозиторий для работы с сущностью TransferOperation в базе данных
+ */
 public interface TransferOperationRepository extends JpaRepository<TransferOperation, UUID> {
 }
